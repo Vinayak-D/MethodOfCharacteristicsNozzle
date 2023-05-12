@@ -3,7 +3,7 @@
 equations::equations(){}
 
 //methods
-pair<float,float> equations::returnOutsideTemperatureAndPressure(float h){
+std::pair<float,float> equations::returnOutsideTemperatureAndPressure(float h){
     float T;
     float P_o;
     if (11000 > h & h < 25000){
@@ -18,7 +18,7 @@ pair<float,float> equations::returnOutsideTemperatureAndPressure(float h){
         T = 15.04 - 0.00649*h;
         P_o = 1000*(101.29*(pow((T+273.1)/288.08,5.256)));
     }
-    pair<float,float> result(T, P_o);
+    std::pair<float,float> result(T, P_o);
     return result;
 }
 
@@ -60,8 +60,8 @@ float equations::getMachFromPM(float Mi, float pmAngle, float gam){
     return 1.0;
 }
 
-vector<float> equations::interpolateAngle(float theta, int n){
-    vector<float> result = {0};
+std::vector<float> equations::interpolateAngle(float theta, int n){
+    std::vector<float> result = {0};
     float temp = theta - (1+fmod(theta,1));
     float delta = temp/(n-2);
     for (int i = 0; i < n-2; i++){
@@ -71,29 +71,29 @@ vector<float> equations::interpolateAngle(float theta, int n){
     return result;
 }
 
-string equations::vectorToString(vector<float> v){
-    string str;
+std::string equations::vectorToString(std::vector<float> v){
+    std::string str;
     for (unsigned int i = 0; i < v.size(); i++){
-        str.append(to_string(v[i]));
+        str.append(std::to_string(v[i]));
         str.append(" ");
     }
     return str;
 }
 
-string equations::vectorToString(vector<int> v){
-    string str;
+std::string equations::vectorToString(std::vector<int> v){
+    std::string str;
     for (unsigned int i = 0; i < v.size(); i++){
-        str.append(to_string(v[i]));
+        str.append(std::to_string(v[i]));
         str.append(" ");
     }
     return str;
 }
 
-pair<float,float> equations::returnXYIntersectionPoint(float xt, float yt, float tht_to, float xb, float yb, float tht_b){
+std::pair<float,float> equations::returnXYIntersectionPoint(float xt, float yt, float tht_to, float xb, float yb, float tht_b){
     tht_to = tht_to*(M_PI/180);
     tht_b = tht_b*(M_PI/180);
     float x = (xt*tan(tht_to)-xb*tan(tht_b)+yb-yt)/(tan(tht_to)-tan(tht_b));
     float y = (tan(tht_to)*tan(tht_b)*(xt-xb)+tan(tht_to)*yb-tan(tht_b)*yt)/(tan(tht_to)-tan(tht_b));
-    pair<float,float> result(x,y);
+    std::pair<float,float> result(x,y);
     return result;
 }

@@ -1,7 +1,7 @@
 #include "methodofcharacteristics.h"
 #include "ui_methodofcharacteristics.h"
 
-methodofcharacteristics::methodofcharacteristics(QWidget *parent, engine Engine, string option) :
+methodofcharacteristics::methodofcharacteristics(QWidget *parent, engine Engine, std::string option) :
     QWidget(parent),
     ui(new Ui::methodofcharacteristics)
 {
@@ -27,7 +27,7 @@ void methodofcharacteristics::on_pushButton_clicked()
     EngineCopy.reset();
 
     //get number of points, initialize them
-    EngineCopy.nLines = min(ui->nField->text().toInt(), 45);
+    EngineCopy.nLines = std::min(ui->nField->text().toInt(), 45);
     if (EngineCopy.nLines < 3){
         EngineCopy.nLines = 3;
     }
@@ -35,10 +35,10 @@ void methodofcharacteristics::on_pushButton_clicked()
     //find max wall angle (deg)
     EngineCopy.max_wall_angle = eq.getPMAngle(EngineCopy.gamma, EngineCopy.exit_Mach)/2;
     //find wall angle divisions
-    vector<float> thtDivisions = eq.interpolateAngle(EngineCopy.max_wall_angle, EngineCopy.nLines);
+    std::vector<float> thtDivisions = eq.interpolateAngle(EngineCopy.max_wall_angle, EngineCopy.nLines);
     //find wall and centerline points
-    vector<int> wallPoints;
-    vector<int> centerPoints;
+    std::vector<int> wallPoints;
+    std::vector<int> centerPoints;
     for (int i = 0; i < EngineCopy.nPoints; i++){
         if (EngineCopy.characteristicPoints[i].is_wall_location){
             wallPoints.push_back(EngineCopy.characteristicPoints[i].index);
@@ -84,7 +84,7 @@ void methodofcharacteristics::on_pushButton_clicked()
             float tht_b = (EngineCopy.characteristicPoints[i-1].flow_angle + EngineCopy.characteristicPoints[i-1].mu + EngineCopy.characteristicPoints[i].flow_angle + EngineCopy.characteristicPoints[i].mu)/2;
             float tht_t = (tv_ax - mu_ax + EngineCopy.characteristicPoints[i].flow_angle - EngineCopy.characteristicPoints[i].mu)/2;
             //find xy location of point i
-            pair<float, float> xy = eq.returnXYIntersectionPoint(xa, EngineCopy.nozzle_throat_radius, tht_t, EngineCopy.characteristicPoints[i-1].x_location, EngineCopy.characteristicPoints[i-1].y_location, tht_b);
+            std::pair<float, float> xy = eq.returnXYIntersectionPoint(xa, EngineCopy.nozzle_throat_radius, tht_t, EngineCopy.characteristicPoints[i-1].x_location, EngineCopy.characteristicPoints[i-1].y_location, tht_b);
             EngineCopy.characteristicPoints[i].x_location = xy.first;
             EngineCopy.characteristicPoints[i].y_location = xy.second;
         }
@@ -98,7 +98,7 @@ void methodofcharacteristics::on_pushButton_clicked()
             float tht_t = EngineCopy.max_wall_angle;
             float tht_b = (EngineCopy.characteristicPoints[i-1].flow_angle + EngineCopy.characteristicPoints[i-1].mu + EngineCopy.characteristicPoints[i].flow_angle + EngineCopy.characteristicPoints[i].mu)/2;
             //find xy location of the wall point
-            pair<float, float> xy = eq.returnXYIntersectionPoint(xa, EngineCopy.nozzle_throat_radius, tht_t, EngineCopy.characteristicPoints[i-1].x_location, EngineCopy.characteristicPoints[i-1].y_location, tht_b);
+            std::pair<float, float> xy = eq.returnXYIntersectionPoint(xa, EngineCopy.nozzle_throat_radius, tht_t, EngineCopy.characteristicPoints[i-1].x_location, EngineCopy.characteristicPoints[i-1].y_location, tht_b);
             EngineCopy.characteristicPoints[i].x_location = xy.first;
             EngineCopy.characteristicPoints[i].y_location = xy.second;
         }
@@ -115,7 +115,7 @@ void methodofcharacteristics::on_pushButton_clicked()
             float tht_t = (EngineCopy.characteristicPoints[i-(EngineCopy.nLines-j)].flow_angle - EngineCopy.characteristicPoints[i-(EngineCopy.nLines-j)].mu + EngineCopy.characteristicPoints[i].flow_angle - EngineCopy.characteristicPoints[i].mu)/2;
             float tht_b = 0;
             //find xy location of centerline point
-            pair<float, float> xy = eq.returnXYIntersectionPoint(EngineCopy.characteristicPoints[i-(EngineCopy.nLines-j)].x_location, EngineCopy.characteristicPoints[i-(EngineCopy.nLines-j)].y_location, tht_t, EngineCopy.characteristicPoints[i-(EngineCopy.nLines-j+1)].x_location, EngineCopy.characteristicPoints[i-(EngineCopy.nLines-j+1)].y_location, tht_b);
+            std::pair<float, float> xy = eq.returnXYIntersectionPoint(EngineCopy.characteristicPoints[i-(EngineCopy.nLines-j)].x_location, EngineCopy.characteristicPoints[i-(EngineCopy.nLines-j)].y_location, tht_t, EngineCopy.characteristicPoints[i-(EngineCopy.nLines-j+1)].x_location, EngineCopy.characteristicPoints[i-(EngineCopy.nLines-j+1)].y_location, tht_b);
             EngineCopy.characteristicPoints[i].x_location = xy.first;
             EngineCopy.characteristicPoints[i].y_location = xy.second;
         }
@@ -127,7 +127,7 @@ void methodofcharacteristics::on_pushButton_clicked()
             float tht_t = (EngineCopy.characteristicPoints[i-(EngineCopy.nLines-j)].flow_angle - EngineCopy.characteristicPoints[i-(EngineCopy.nLines-j)].mu + EngineCopy.characteristicPoints[i].flow_angle - EngineCopy.characteristicPoints[i].mu)/2;
             float tht_b = (EngineCopy.characteristicPoints[i-1].flow_angle + EngineCopy.characteristicPoints[i-1].mu + EngineCopy.characteristicPoints[i].flow_angle + EngineCopy.characteristicPoints[i].mu)/2;
             //find xy location of point
-            pair<float, float> xy = eq.returnXYIntersectionPoint(EngineCopy.characteristicPoints[i-(EngineCopy.nLines-j)].x_location, EngineCopy.characteristicPoints[i-(EngineCopy.nLines-j)].y_location, tht_t, EngineCopy.characteristicPoints[i-1].x_location, EngineCopy.characteristicPoints[i-1].y_location, tht_b);
+            std::pair<float, float> xy = eq.returnXYIntersectionPoint(EngineCopy.characteristicPoints[i-(EngineCopy.nLines-j)].x_location, EngineCopy.characteristicPoints[i-(EngineCopy.nLines-j)].y_location, tht_t, EngineCopy.characteristicPoints[i-1].x_location, EngineCopy.characteristicPoints[i-1].y_location, tht_b);
             EngineCopy.characteristicPoints[i].x_location = xy.first;
             EngineCopy.characteristicPoints[i].y_location = xy.second;
             k += 1;
@@ -140,7 +140,7 @@ void methodofcharacteristics::on_pushButton_clicked()
             float tht_t = EngineCopy.characteristicPoints[i-1].flow_angle;
             float tht_b = (EngineCopy.characteristicPoints[i-1].flow_angle + EngineCopy.characteristicPoints[i-1].mu + EngineCopy.characteristicPoints[i].flow_angle + EngineCopy.characteristicPoints[i].mu)/2;
             //find xy location of the wall point
-            pair<float, float> xy = eq.returnXYIntersectionPoint(EngineCopy.characteristicPoints[i-(EngineCopy.nLines-j)].x_location, EngineCopy.characteristicPoints[i-(EngineCopy.nLines-j)].y_location, tht_t, EngineCopy.characteristicPoints[i-1].x_location, EngineCopy.characteristicPoints[i-1].y_location, tht_b);
+            std::pair<float, float> xy = eq.returnXYIntersectionPoint(EngineCopy.characteristicPoints[i-(EngineCopy.nLines-j)].x_location, EngineCopy.characteristicPoints[i-(EngineCopy.nLines-j)].y_location, tht_t, EngineCopy.characteristicPoints[i-1].x_location, EngineCopy.characteristicPoints[i-1].y_location, tht_b);
             EngineCopy.characteristicPoints[i].x_location = xy.first;
             EngineCopy.characteristicPoints[i].y_location = xy.second;
             k = 1;
@@ -195,7 +195,7 @@ void methodofcharacteristics::plotNozzlePoints(QCustomPlot *customPlot){
 //output to file
 void methodofcharacteristics::outputToFile(){
     //change "/Users/vinayakdeshpande/Desktop/" in below line to your desired output directory
-    QFile File ("/Users/vinayakdeshpande/Desktop/nozzlePoints.txt");
+    QFile File ("C/Users/vinay/Desktop/nozzlePoints.txt");
     if (File.open(QIODevice::ReadWrite)){
         QTextStream stream (&File);
         stream << "Index" << "\t\t" << "X" << "\t\t" << "Y" << "\t\t" << "Mach" << "\t\t" << "FlowAngle" << "\t" << "P-MAngle" << "\n";

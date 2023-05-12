@@ -2,8 +2,6 @@
 #define ENGINE_H
 #include "cPoint.h"
 #include <vector>
-using namespace std;
-
 #pragma once
 
 class engine{
@@ -30,7 +28,7 @@ class engine{
         float exit_sound_speed; //m/s
         float exit_Mach; //unitless
         float max_wall_angle; //deg
-        vector<cPoint> characteristicPoints;
+        std::vector<cPoint> characteristicPoints;
 
 };
 

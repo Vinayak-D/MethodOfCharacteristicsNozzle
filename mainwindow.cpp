@@ -56,14 +56,14 @@ void MainWindow::on_exitMachOption_toggled(bool checked)
 
 void MainWindow::on_pushButton_clicked()
 {
-    string option;
+    std::string option;
     if (ui->allParamsOption->isChecked()){
         Engine.chamber_pressure = ui->PcField->text().toFloat();
         Engine.chamber_temperature = ui->TcField->text().toFloat();
         Engine.gamma = ui->GamField->text().toFloat();
         Engine.R_gas = ui->RField->text().toFloat();
         float altitude = ui->HField->text().toFloat();
-        pair<float,float> tP = eq.returnOutsideTemperatureAndPressure(altitude);
+        std::pair<float,float> tP = eq.returnOutsideTemperatureAndPressure(altitude);
         Engine.exit_pressure = tP.second;
         Engine.exit_Mach = eq.getExitMach(Engine.chamber_temperature, Engine.chamber_pressure, Engine.exit_pressure, Engine.gamma, Engine.R_gas);
         option = "one";

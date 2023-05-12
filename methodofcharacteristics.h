@@ -16,7 +16,7 @@ class methodofcharacteristics : public QWidget
     Q_OBJECT
 
 public:
-    explicit methodofcharacteristics(QWidget *parent = nullptr, engine Engine = engine(), string option = "none");
+    explicit methodofcharacteristics(QWidget *parent = nullptr, engine Engine = engine(), std::string option = "none");
     ~methodofcharacteristics();
 
 private slots:
