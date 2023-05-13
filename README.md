@@ -1,5 +1,6 @@
 # MethodOfCharacteristicsNozzle
 A custom GUI app for rocket engine design using the Method of Characteristics in C++
+To learn the theory and algorithms, watch [this](https://www.youtube.com/watch?v=WJkTGog_aK0&)
 
 Dependancies:
 - C++
